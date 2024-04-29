@@ -117,6 +117,9 @@ importers:
       '@nestjs/swagger':
         specifier: ^7.3.1
         version: 7.3.1(@nestjs/common@10.3.8)(@nestjs/core@10.3.8)(reflect-metadata@0.2.2)
+      '@openfeature/nestjs-sdk':
+        specifier: 0.1.4-experimental
+        version: 0.1.4-experimental(@nestjs/common@10.3.8)(@nestjs/core@10.3.8)(@openfeature/server-sdk@1.13.5)(rxjs@7.8.1)
       reflect-metadata:
         specifier: ^0.2.0
         version: 0.2.2
@@ -273,7 +276,72 @@ importers:
         specifier: ^5.1.3
         version: 5.4.5
 
+  apps/proxy-service: {}
+
   packages/components/svelte-components:
+    devDependencies:
+      '@playwright/test':
+        specifier: ^1.28.1
+        version: 1.43.1
+      '@sveltejs/adapter-auto':
+        specifier: ^3.0.0
+        version: 3.2.0(@sveltejs/kit@2.5.7)
+      '@sveltejs/kit':
+        specifier: ^2.0.0
+        version: 2.5.7(@sveltejs/vite-plugin-svelte@3.1.0)(svelte@4.2.15)(vite@5.2.10)
+      '@sveltejs/package':
+        specifier: ^2.0.0
+        version: 2.3.1(svelte@4.2.15)(typescript@5.4.5)
+      '@sveltejs/vite-plugin-svelte':
+        specifier: ^3.0.0
+        version: 3.1.0(svelte@4.2.15)(vite@5.2.10)
+      '@types/eslint':
+        specifier: ^8.56.0
+        version: 8.56.10
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^7.0.0
+        version: 7.8.0(@typescript-eslint/parser@7.8.0)(eslint@8.57.0)(typescript@5.4.5)
+      '@typescript-eslint/parser':
+        specifier: ^7.0.0
+        version: 7.8.0(eslint@8.57.0)(typescript@5.4.5)
+      eslint:
+        specifier: ^8.56.0
+        version: 8.57.0
+      eslint-config-prettier:
+        specifier: ^9.1.0
+        version: 9.1.0(eslint@8.57.0)
+      eslint-plugin-svelte:
+        specifier: ^2.35.1
+        version: 2.38.0(eslint@8.57.0)(svelte@4.2.15)
+      prettier:
+        specifier: ^3.1.1
+        version: 3.2.5
+      prettier-plugin-svelte:
+        specifier: ^3.1.2
+        version: 3.2.3(prettier@3.2.5)(svelte@4.2.15)
+      publint:
+        specifier: ^0.1.9
+        version: 0.1.16
+      svelte:
+        specifier: ^4.2.7
+        version: 4.2.15
+      svelte-check:
+        specifier: ^3.6.0
+        version: 3.7.0(@babel/core@7.24.4)(postcss@8.4.38)(svelte@4.2.15)
+      tslib:
+        specifier: ^2.4.1
+        version: 2.6.2
+      typescript:
+        specifier: ^5.0.0
+        version: 5.4.5
+      vite:
+        specifier: ^5.0.11
+        version: 5.2.10(@types/node@20.12.7)
+      vitest:
+        specifier: ^1.2.0
+        version: 1.5.2(@types/node@20.12.7)
+
+  packages/components/svelte-web-components:
     devDependencies:
       '@playwright/test':
         specifier: ^1.28.1
@@ -2698,6 +2766,33 @@ packages:
       - '@swc/core'
       - debug
     dev: true
+
+  /@openfeature/core@1.1.0:
+    resolution: {integrity: sha512-aNuvOmqrFxAyzLnEa3YINsUu1pskXyEeMu4O9Kyde0+cS7q+Tgh4KKePwAROXkhhU1RQckW931P41xK5osXAWA==}
+    dev: false
+
+  /@openfeature/nestjs-sdk@0.1.4-experimental(@nestjs/common@10.3.8)(@nestjs/core@10.3.8)(@openfeature/server-sdk@1.13.5)(rxjs@7.8.1):
+    resolution: {integrity: sha512-pym7Q2rRndUoqk/erVOO+MC1LV0vW4ynAPYtPQGbWdDQB0agmQIKHy8t4lzfFrZ3HDoW0O3hxsLc+f7miawRDg==}
+    peerDependencies:
+      '@nestjs/common': ^8.0.0 || ^9.0.0 || ^10.0.0
+      '@nestjs/core': ^8.0.0 || ^9.0.0 || ^10.0.0
+      '@openfeature/server-sdk': '>=1.7.5'
+      rxjs: ^6.0.0 || ^7.0.0 || 8.0.0
+    dependencies:
+      '@nestjs/common': 10.3.8(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      '@nestjs/core': 10.3.8(@nestjs/common@10.3.8)(@nestjs/platform-express@10.3.8)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      '@openfeature/server-sdk': 1.13.5(@openfeature/core@1.1.0)
+      rxjs: 7.8.1
+    dev: false
+
+  /@openfeature/server-sdk@1.13.5(@openfeature/core@1.1.0):
+    resolution: {integrity: sha512-7cF/0BL4kFixehZWrX5cZMAxYCGmEYMKJqCv6wx+kiOJ+CAhStIXmDA5mmyvoLSLAAmng5a4AAxW1D4BTQycQw==}
+    engines: {node: '>=16'}
+    peerDependencies:
+      '@openfeature/core': 1.1.0
+    dependencies:
+      '@openfeature/core': 1.1.0
+    dev: false
 
   /@phenomnomnominal/tsquery@5.0.1(typescript@5.4.5):
     resolution: {integrity: sha512-3nVv+e2FQwsW8Aw6qTU6f+1rfcJ3hrcnvH/mu9i8YhxO+9sqbOfpL8m6PbET5+xKOlz/VSbp0RoYWYCtIsnmuA==}

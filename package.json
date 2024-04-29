@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "nest": "npx @nestjs/cli@latest"
+    "nest": "npx @nestjs/cli@latest",
+    "nx": "nx ",
+    "dev:apis": "nx run-many -t dev --projects=auth,inventory,feature-flags"
   },
   "private": true,
   "dependencies": {},
