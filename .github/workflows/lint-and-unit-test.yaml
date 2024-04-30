@@ -11,10 +11,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
   cancel-in-progress: true
 
-# env:
-#   NX_BASE: ${{ github.base_ref }}
-#   NX_HEAD: ${{ github.head_ref }}
-
 jobs:
   lint:
     if: github.event.pull_request.draft == false
