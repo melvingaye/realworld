@@ -25,9 +25,9 @@ jobs:
       - name: Log Branch Context
         run: |
           echo "git.ref ${{ github.ref }}"
-          echo "git.ref_name ${{ github.ref }}"
-          echo "git.head_ref SOURCE_BRANCH ${{ github.ref }}"
-          echo "git.base_ref TARGET_BRANCH ${{ github.ref }}"
+          echo "git.ref_name ${{ github.ref_name }}"
+          echo "git.head_ref SOURCE_BRANCH ${{ github.head_ref }}"
+          echo "git.base_ref TARGET_BRANCH ${{ github.base_ref }}"
           echo "Attempting to merge from ${{ env.SOURCE_BRANCH }} to ${{ env.TARGET_BRANCH }}"
 
       - name: Check PR title
