@@ -32,7 +32,7 @@ jobs:
 
       - name: Check PR title
         if: |
-          [[ ! github.event.pull_request.title =~ env.CONVENTIONAL_COMMIT_REGEX ]]
+          [[ ! github.event.pull_request.title =~ ${{ env.CONVENTIONAL_COMMIT_REGEX }} ]]
         run: |
           echo "ERROR: PR title needs to match this pattern: ${{ env.CONVENTIONAL_COMMIT_REGEX }} or from release/* or hotfix/*"
           exit 1
@@ -46,7 +46,7 @@ jobs:
 
       - name: Check develop branch PR
         if: |
-          env.TARGET_BRANCH  == 'develop' && !((!(startsWith(env.SOURCE_BRANCH, 'release/') || startsWith(env.SOURCE_BRANCH, 'hotfix/'))) || ([[! ${{ env.SOURCE_BRANCH }} =~ ${{ env.CONVENTIONAL_COMMIT_REGEX }}]]))
+          env.TARGET_BRANCH  == 'develop' && !((!(startsWith(env.SOURCE_BRANCH, 'release/') || startsWith(env.SOURCE_BRANCH, 'hotfix/'))) || ([[ ! ${{ env.SOURCE_BRANCH }} =~ ${{ env.CONVENTIONAL_COMMIT_REGEX }}]]))
         run: |
           echo "ERROR: Only release, hotfix, or branches that match this pattern ${{ env.CONVENTIONAL_COMMIT_REGEX }} can be merged into develop."
           exit 1
