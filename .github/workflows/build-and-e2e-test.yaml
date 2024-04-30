@@ -1,13 +1,55 @@
 name: Build and E2E Tests
 on:
-  push:
-    branches:
-      # Change this if your primary branch is not main
-      - main
   pull_request:
 
+  workflow_run:
+    types: [completed]
+    workflows: [Enforce Gitflow]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
-  main:
+  build:
+    if: github.event.pull_request.draft == false
+    name: Build and E2E Tests
+    timeout-minutes: 3
     runs-on: ubuntu-latest
+
     steps:
-      - run: echo "Hello GitHub Actions!"
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 21
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Detect affected projects
+        uses: nrwl/nx-set-shas@v4
+
+      - run: |
+          echo "BASE: ${{ env.NX_BASE }}"
+          echo "HEAD: ${{ env.NX_HEAD }}"
+
+      # This line is needed for nx affected to work when CI is running on a PR
+      - run: git branch --track ${{ github.base_ref }} origin/${{ github.base_ref }}
+        if: ${{ github.event_name == 'pull_request' }}
+
+      - name: Build
+        run: pnpm build:affected
+
+      - name: Test E2E
+        run: pnpm test:e2e:affected
