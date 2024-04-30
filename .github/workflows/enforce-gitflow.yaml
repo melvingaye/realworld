@@ -32,7 +32,7 @@ jobs:
 
       - name: Check PR title
         if: |
-          [[ ! github.event.pull_request.title =~ ${{ env.CONVENTIONAL_COMMIT_REGEX }} ]]
+          !([[ github.event.pull_request.title =~ ${{ env.CONVENTIONAL_COMMIT_REGEX }} ]] || (startsWith(env.SOURCE_BRANCH, 'release/') || startsWith(env.SOURCE_BRANCH, 'hotfix/')))
         run: |
           echo "ERROR: PR title needs to match this pattern: ${{ env.CONVENTIONAL_COMMIT_REGEX }} or from release/* or hotfix/*"
           exit 1
