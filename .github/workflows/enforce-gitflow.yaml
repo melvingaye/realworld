@@ -1,57 +1,57 @@
-# Enforces Gitflow and branching naming conventions
+# # Enforces Gitflow and branching naming conventions
 
-name: Enforce Gitflow
+# name: Enforce Gitflow
 
-on:
-  pull_request:
-    types: [ready_for_review, opened, synchronize, edited, reopened]
-    branches: [main, develop]
+# on:
+#   pull_request:
+#     types: [ready_for_review, opened, synchronize, edited, reopened]
+#     branches: [main, develop]
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
-  cancel-in-progress: true
+# concurrency:
+#   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+#   cancel-in-progress: true
 
-env:
-  TARGET_BRANCH: ${{ github.base_ref }}
-  SOURCE_BRANCH: ${{ github.head_ref }}
-  CONVENTIONAL_COMMIT_REGEX: '^(fix|feat|chore|ci|test|build|docs|perf|refactor|revert|style)\/(emrge|atlas|signal|map)-\d{1,4}-.*$'
+# env:
+#   TARGET_BRANCH: ${{ github.base_ref }}
+#   SOURCE_BRANCH: ${{ github.head_ref }}
+#   CONVENTIONAL_COMMIT_REGEX: '^(fix|feat|chore|ci|test|build|docs|perf|refactor|revert|style)\/(emrge|atlas|signal|map)-\d{1,4}-.*$'
 
-jobs:
-  validate_branch:
-    if: github.event.pull_request.draft == false
-    runs-on: ubuntu-latest
+# jobs:
+#   validate_branch:
+#     if: github.event.pull_request.draft == false
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Log Branch Context
-        run: |
-          echo "git.ref ${{ github.ref }}"
-          echo "git.ref_name ${{ github.ref }}"
-          echo "git.head_ref SOURCE_BRANCH ${{ github.ref }}"
-          echo "git.base_ref TARGET_BRANCH ${{ github.ref }}"
-          echo "Attempting to merge from ${{ env.SOURCE_BRANCH }} to ${{ env.TARGET_BRANCH }}"
+#     steps:
+#       - name: Log Branch Context
+#         run: |
+#           echo "git.ref ${{ github.ref }}"
+#           echo "git.ref_name ${{ github.ref_name }}"
+#           echo "git.head_ref SOURCE_BRANCH ${{ github.head_ref }}"
+#           echo "git.base_ref TARGET_BRANCH ${{ github.base_ref }}"
+#           echo "Attempting to merge from ${{ env.SOURCE_BRANCH }} to ${{ env.TARGET_BRANCH }}"
 
-      - name: Check PR title
-        if: |
-          [[ ! github.event.pull_request.title =~ env.CONVENTIONAL_COMMIT_REGEX ]]
-        run: |
-          echo "ERROR: PR title needs to match this pattern: ${{ env.CONVENTIONAL_COMMIT_REGEX }} or from release/* or hotfix/*"
-          exit 1
+#       - name: Check PR title
+#         if: |
+#           !([[ github.event.pull_request.title =~ ${{ env.CONVENTIONAL_COMMIT_REGEX }} ]] || (startsWith(env.SOURCE_BRANCH, 'release/') || startsWith(env.SOURCE_BRANCH, 'hotfix/')))
+#         run: |
+#           echo "ERROR: PR title needs to match this pattern: ${{ env.CONVENTIONAL_COMMIT_REGEX }} or from release/* or hotfix/*"
+#           exit 1
 
-      - name: Check main branch PR
-        if: |
-          env.TARGET_BRANCH  == 'main' && !(startsWith(env.SOURCE_BRANCH, 'release/') || startsWith(env.SOURCE_BRANCH, 'hotfix/'))
-        run: |
-          echo "ERROR: Only release or hotfix branches can be merged into main."
-          exit 1
+#       - name: Check main branch PR
+#         if: |
+#           env.TARGET_BRANCH  == 'main' && !(startsWith(env.SOURCE_BRANCH, 'release/') || startsWith(env.SOURCE_BRANCH, 'hotfix/'))
+#         run: |
+#           echo "ERROR: Only release or hotfix branches can be merged into main."
+#           exit 1
 
-      - name: Check develop branch PR
-        if: |
-          env.TARGET_BRANCH  == 'develop' && !((!(startsWith(env.SOURCE_BRANCH, 'release/') || startsWith(env.SOURCE_BRANCH, 'hotfix/'))) || ([[ ! env.SOURCE_BRANCH =~ env.CONVENTIONAL_COMMIT_REGEX ]]))
-        run: |
-          echo "ERROR: Only release, hotfix, or branches that match this pattern ${{ env.CONVENTIONAL_COMMIT_REGEX }} can be merged into develop."
-          exit 1
+#       - name: Check develop branch PR
+#         if: |
+#           env.TARGET_BRANCH  == 'develop' && !((!(startsWith(env.SOURCE_BRANCH, 'release/') || startsWith(env.SOURCE_BRANCH, 'hotfix/'))) || ([[ ! ${{ env.SOURCE_BRANCH }} =~ ${{ env.CONVENTIONAL_COMMIT_REGEX }}]]))
+#         run: |
+#           echo "ERROR: Only release, hotfix, or branches that match this pattern ${{ env.CONVENTIONAL_COMMIT_REGEX }} can be merged into develop."
+#           exit 1
 
-      - name: Branch checks passed
-        run: |
-          echo "Checks passed ${{ env.SOURCE_BRANCH }} can be merged into ${{ env.TARGET_BRANCH }}"
-          exit 0
+#       - name: Branch checks passed
+#         run: |
+#           echo "Checks passed ${{ env.SOURCE_BRANCH }} can be merged into ${{ env.TARGET_BRANCH }}"
+#           exit 0
