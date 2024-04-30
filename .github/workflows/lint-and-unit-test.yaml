@@ -32,10 +32,16 @@ jobs:
           cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --forzen-lockfile
+
+      - name: Detect affected projects
+        uses: nrwl/nx-set-shas@v3
+      # This line is needed for nx affected to work when CI is running on a PR
+      - run: git branch --track ${{ github.base_ref }} origin/${{ github.base_ref }}
+        if: ${{ github.event_name == 'pull_request' }}
 
       - name: Lint
-        run: pnpm lint
+        run: pnpm lint:all
 
       - name: Test
         run: pnpm test:affected
