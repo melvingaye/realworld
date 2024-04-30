@@ -7,11 +7,19 @@ on:
     types: [completed]
     workflows: [Enforce Gitflow]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
+# env:
+#   NX_BASE: ${{ github.base_ref }}
+#   NX_HEAD: ${{ github.head_ref }}
+
 jobs:
   lint:
     if: github.event.pull_request.draft == false
     name: Lint and Unit Test
-    timeout-minutes: 20
+    timeout-minutes: 3
     runs-on: ubuntu-latest
 
     steps:
@@ -36,11 +44,11 @@ jobs:
 
       - name: Detect affected projects
         uses: nrwl/nx-set-shas@v4
-      
+
       - run: |
           echo "BASE: ${{ env.NX_BASE }}"
           echo "HEAD: ${{ env.NX_HEAD }}"
-          
+
       # This line is needed for nx affected to work when CI is running on a PR
       - run: git branch --track ${{ github.base_ref }} origin/${{ github.base_ref }}
         if: ${{ github.event_name == 'pull_request' }}
