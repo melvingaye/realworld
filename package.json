@@ -5,7 +5,21 @@
   "scripts": {
     "nest": "npx @nestjs/cli@latest",
     "nx": "nx ",
-    "dev:apis": "nx run-many -t dev --projects=auth,inventory,feature-flags"
+    "lint": "nx lint ",
+    "dev": "nx dev ",
+    "test": "nx test ",
+    "build": "nx build ",
+    "test:e2e": "nx test:e2e ",
+    "dev:apis": "nx run-many --target=dev --projects=auth,inventory,feature-flags",
+    "dev:uis": "nx run-many --target=dev --projects=store-front,warehouse",
+    "lint:affected": "nx affected --target=lint",
+    "test:affected": "nx affected --target=test",
+    "build:affected": "nx affected --target=build",
+    "test:e2e:affected": "nx affected --target=test:e2e",
+    "lint:all": "nx run-many --target=lint --all",
+    "test:all": "nx run-many --target=test --all",
+    "build:all": "nx run-many --target=build --all",
+    "test:e2e:all": "nx run-many --target=test:e2e --all"
   },
   "private": true,
   "dependencies": {},

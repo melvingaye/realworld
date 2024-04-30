@@ -1,0 +1,38 @@
+name: Lint and Unit Test
+
+on:
+  workflow_run:
+    types: [completed]
+    workflows: [Enforce Gitflow]
+
+jobs:
+  lint:
+    if: github.event.pull_request.draft == false
+    name: Lint and Unit Test
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Test
+        run: pnpm test
